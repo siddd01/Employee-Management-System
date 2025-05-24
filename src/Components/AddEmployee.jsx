@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AddEmployee = () => {
+    const navigate=useNavigate()
   const [employee, setEmployee] = useState({
     name: "",
     email: "",
@@ -9,7 +11,7 @@ const AddEmployee = () => {
     address: "",
     salary: "",
     category_id: "",
-    image: "" // just a string, like "default.png"
+    image: null // This will hold the File object
   });
 
   const [categories, setCategories] = useState([]);
@@ -24,21 +26,45 @@ const AddEmployee = () => {
       });
   }, []);
 
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === "image") {
+      setEmployee({ ...employee, image: files[0] });  // store the selected file
+    } else {
+      setEmployee({ ...employee, [name]: value });
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios.post('http://localhost:3000/auth/add_employee', employee)
-      .then(res => {
-        if (res.data.Status) {
-          alert("Employee added successfully!");
-        } else {
-          alert("Failed to add employee.");
-        }
-      })
-      .catch(err => {
-        console.error("Error:", err);
-        alert("Something went wrong");
-      });
+    const formData = new FormData();
+    formData.append('name', employee.name);
+    formData.append('email', employee.email);
+    formData.append('password', employee.password);
+    formData.append('address', employee.address);
+    formData.append('salary', employee.salary);
+    formData.append('category_id', employee.category_id);
+    if (employee.image) {
+      formData.append('image', employee.image);  // append file only if selected
+    }
+
+    axios.post('http://localhost:3000/auth/add_employee', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then(res => {
+      if (res.data.Status) {
+        navigate('/dashboard/employee')
+      } else {
+        alert("Failed to add employee.");
+      }
+    })
+    .catch(err => {
+      console.error("Error:", err);
+      alert("Something went wrong");
+    });
   };
 
   return (
@@ -46,12 +72,12 @@ const AddEmployee = () => {
       <div className="border-2 border-gray-300 bg-white shadow-lg rounded-lg p-10 w-[500px]">
         <h1 className="text-4xl font-bold text-center mb-4 text-gray-800">Add Employee</h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
           <input
             type="text"
             name="name"
             value={employee.name}
-            onChange={(e) => setEmployee({ ...employee, name: e.target.value })}
+            onChange={handleChange}
             placeholder="Enter Name"
             className="w-full h-[40px] border border-gray-300 rounded-md p-2"
             required
@@ -61,7 +87,7 @@ const AddEmployee = () => {
             type="email"
             name="email"
             value={employee.email}
-            onChange={(e) => setEmployee({ ...employee, email: e.target.value })}
+            onChange={handleChange}
             placeholder="Enter Email"
             className="w-full h-[40px] border border-gray-300 rounded-md p-2"
             required
@@ -71,7 +97,7 @@ const AddEmployee = () => {
             type="password"
             name="password"
             value={employee.password}
-            onChange={(e) => setEmployee({ ...employee, password: e.target.value })}
+            onChange={handleChange}
             placeholder="Enter Password"
             className="w-full h-[40px] border border-gray-300 rounded-md p-2"
             required
@@ -81,7 +107,7 @@ const AddEmployee = () => {
             type="number"
             name="salary"
             value={employee.salary}
-            onChange={(e) => setEmployee({ ...employee, salary: e.target.value })}
+            onChange={handleChange}
             placeholder="Enter Salary"
             className="w-full h-[40px] border border-gray-300 rounded-md p-2"
             required
@@ -91,7 +117,7 @@ const AddEmployee = () => {
             type="text"
             name="address"
             value={employee.address}
-            onChange={(e) => setEmployee({ ...employee, address: e.target.value })}
+            onChange={handleChange}
             placeholder="Enter Address"
             className="w-full h-[40px] border border-gray-300 rounded-md p-2"
             required
@@ -100,7 +126,7 @@ const AddEmployee = () => {
           <select
             name="category_id"
             value={employee.category_id}
-            onChange={(e) => setEmployee({ ...employee, category_id: e.target.value })}
+            onChange={handleChange}
             className="w-full h-[40px] border border-gray-300 rounded-md p-2 bg-white"
             required
           >
@@ -113,11 +139,10 @@ const AddEmployee = () => {
           </select>
 
           <input
-            type="text"
+            type="file"
             name="image"
-            value={employee.image}
-            onChange={(e) => setEmployee({ ...employee, image: e.target.value })}
-            placeholder="Enter image path or filename"
+            accept="image/*"
+            onChange={handleChange}
             className="w-full h-[40px] border border-gray-300 rounded-md p-2"
             required
           />
