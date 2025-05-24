@@ -1,7 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+    const navigate=useNavigate()
+    const [error,setError]=useState()
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -9,19 +12,34 @@ const Login = () => {
 
   const [agree, setAgree] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios.post('http://localhost:3000/auth/adminLogin')
-    .then(result => console.log(result))
-    .catch(err=> console.log(err))
-    // Add your login logic here
-    console.log("Submitted values:", values);
-    console.log("Agreed to terms:", agree);
-  };
+const handleSubmit = (e) => {
+  e.preventDefault();
+
+  axios.post('http://localhost:3000/auth/adminLogin', values,{
+    withCredentials:true
+  })
+    .then(result => {
+        if(result.data.loginStatus){
+            navigate("/dashboard")
+        }
+        else{
+            setError(result.data.Error)
+        }
+        
+    })
+    .catch(err => {
+      console.log("Login error:", err);
+   
+    });
+
+  console.log("Submitted values:", values);
+  console.log("Agreed to terms:", agree);
+};
 
   return (
     <div className="w-screen h-screen overflow-hidden flex justify-center items-center">
       <div className="border rounded-xl shadow-md p-10 bg-white w-[350px]">
+         <p className="text-xl text-yellow-400 text-center font-semibold">{error}</p>
         <h2 className="text-3xl font-semibold text-center mb-6">Login Page</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
