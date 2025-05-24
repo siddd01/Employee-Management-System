@@ -3,6 +3,7 @@ import AddCategory from "./Components/AddCategory";
 import AddEmployee from "./Components/AddEmployee";
 import Category from "./Components/Category";
 import Dashboard from "./Components/Dashboard";
+import EditEmployee from "./Components/EditEmployee";
 import Employee from "./Components/Employee";
 import Home from "./Components/Home";
 import Login from "./Components/Login";
@@ -23,6 +24,7 @@ const App = () => {
           <Route path='profile' element={<Profile />} />
           <Route path='add_category' element={<AddCategory />} />
           <Route path='add_employee' element={<AddEmployee />} />
+          <Route path='edit_employee/:id' element={<EditEmployee />} />
   
         </Route>
     </Routes>

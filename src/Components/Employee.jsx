@@ -79,19 +79,19 @@ const Employee = () => {
               </td>
               <td className="px-6 py-4 border-b border-gray-300 text-gray-800">
                 <div className="flex">
-                    <button
+                    <Link  to={`/dashboard/edit_employee/`+ e.id}
                   type="button"
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 >
                   Edit
-                </button>
+                </Link>
 
-                <button
+                <Link
                   type="button"
                   className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 ml-2 focus:outline-none focus:ring-2 focus:ring-red-400"
                 >
                   Delete
-                </button>
+                </Link>
                 </div>
 
               </td>
