@@ -17,6 +17,23 @@ const Employee = () => {
     })
     .catch(err => console.log(err));
   },[])
+
+const deleteEmployee = (id) => {
+  console.log("this is id", id);
+  axios.delete(`http://localhost:3000/auth/employee/${id}`)
+    .then(result => {
+      console.log(result);
+      if (result.data.Status) {
+        setEmployee(prev => prev.filter(emp => emp.id !== id));
+      } else {
+        alert("Failed to delete employee");
+      }
+    })
+    .catch(err => console.log(err));
+};
+
+
+
   return (
     <div className="px-5 mt-10 max-w-6xl mx-auto">
   <div className="flex justify-between items-center mb-6">
@@ -86,12 +103,12 @@ const Employee = () => {
                   Edit
                 </Link>
 
-                <Link
+                <button onClick={()=>deleteEmployee(e.id)}
                   type="button"
                   className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 ml-2 focus:outline-none focus:ring-2 focus:ring-red-400"
                 >
                   Delete
-                </Link>
+                </button>
                 </div>
 
               </td>
