@@ -21,33 +21,50 @@ const Category = () => {
 }, []);
 
   return (
-    <div className="px-5 mt-5">
-        <div className="flex justify-center ">
-            <h3 className="text-4xl font-semibold">Category</h3>
+ <div className="px-5 mt-10 max-w-4xl mx-auto">
+  <div className="flex justify-between items-center mb-6">
+    <h3 className="text-4xl font-semibold text-gray-800">Categories</h3>
+    <Link
+      to="/dashboard/add_category"
+      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md shadow transition duration-300"
+    >
+      Add Category
+    </Link>
+  </div>
 
-        </div>
-        <Link to="/dashboard/add_category" className=" border p-2 bg-blue-600 hover:bg-blue-700 text-xl rounded">Add Category </Link>
-
-        <div className="">
-          <table>
-           <thead>
-            <tr>
-              <th>Name</th>
-            </tr>
-           </thead>
-          <tbody>
-         {
+  <div className="overflow-x-auto">
+    <table className="min-w-full border border-gray-300 rounded-md overflow-hidden">
+      <thead className="bg-gray-100">
+        <tr>
+          <th className="text-left px-6 py-3 text-gray-700 font-medium uppercase tracking-wider border-b border-gray-300">
+            Name
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {category.length > 0 ? (
           category.map((c, index) => (
-            <tr key={index}>
-              <td>{c.name}</td>
+            <tr
+              key={index}
+              className="odd:bg-white even:bg-gray-50 hover:bg-blue-50 transition"
+            >
+              <td className="px-6 py-4 border-b border-gray-300 text-gray-800">
+                {c.name}
+              </td>
             </tr>
           ))
-        } 
+        ) : (
+          <tr>
+            <td className="px-6 py-4 text-center text-gray-500" colSpan={1}>
+              No categories found.
+            </td>
+          </tr>
+        )}
       </tbody>
-          </table>
-        </div>
-      
-    </div>
+    </table>
+  </div>
+</div>
+
   )
 }
 

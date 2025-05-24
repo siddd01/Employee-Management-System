@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import AddCategory from "./Components/AddCategory";
+import AddEmployee from "./Components/AddEmployee";
 import Category from "./Components/Category";
 import Dashboard from "./Components/Dashboard";
 import Employee from "./Components/Employee";
@@ -21,6 +22,7 @@ const App = () => {
           <Route path='category' element={<Category />} />
           <Route path='profile' element={<Profile />} />
           <Route path='add_category' element={<AddCategory />} />
+          <Route path='add_employee' element={<AddEmployee />} />
   
         </Route>
     </Routes>
