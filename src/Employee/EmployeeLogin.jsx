@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const EmployeeLogin = () => {
     const navigate=useNavigate()
     const [error,setError]=useState()
   const [values, setValues] = useState({
@@ -15,12 +15,13 @@ const Login = () => {
 const handleSubmit = (e) => {
   e.preventDefault();
 
-  axios.post('http://localhost:3000/auth/adminLogin', values,{
+  axios.post('http://localhost:3000/employee/employee_login', values,{
     withCredentials:true
   })
     .then(result => {
         if(result.data.loginStatus){
-            navigate("/dashboard/home")
+            alert("success")
+            navigate("/employee_detail/"+ result.data.id)
         }
         else{
             setError(result.data.Error)
@@ -37,16 +38,17 @@ const handleSubmit = (e) => {
 };
 
   return (
-    <div className="w-screen h-screen overflow-hidden flex justify-center items-center">
-           <div
-        className="absolute bottom-[980px] left-[0px] ml-10 cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 transition duration-200 "
-        onClick={() => navigate("/employeeLogin")}
+     <div className="w-screen h-screen overflow-hidden flex justify-center items-center">
+
+     <div
+        className="absolute bottom-[980px] left-[0px] ml-10 cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 transition duration-200"
+        onClick={() => navigate("/adminLogin")}
       >
         Go to Admin Login
       </div>
       <div className="border rounded-xl shadow-md p-10 bg-white w-[350px]">
          <p className="text-xl text-yellow-400 text-center font-semibold">{error}</p>
-        <h2 className="text-3xl font-semibold text-center mb-6">Login Page</h2>
+        <h2 className="text-3xl font-semibold text-center mb-6"> Employee Login Page</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="text-lg block mb-1" htmlFor="email">
@@ -98,7 +100,7 @@ const handleSubmit = (e) => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default EmployeeLogin
